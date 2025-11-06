@@ -1,0 +1,23 @@
+crypto-airdrop-platform/
+│
+├── frontend/
+│   ├── pages/
+│   │    ├── index.js
+│   │    ├── dashboard.js
+│   ├── styles/
+│   │    └── globals.css
+│   ├── tailwind.config.js
+│   ├── package.json
+│   └── next.config.js
+│
+├── backend/
+│   ├── routes/
+│   │    └── walletRoutes.js
+│   ├── models/
+│   │    └── Wallet.js
+│   ├── server.js
+│   ├── package.json
+│   └── .env
+│
+├── README.md
+└── .gitignore
