@@ -1,0 +1,23 @@
+import { useEffect, useState } from "react";
+
+export default function Dashboard() {
+  const [memeBalance, setMemeBalance] = useState(0.0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMemeBalance((prev) => prev + 0.00001);
+    }, 60000); // Update every minute
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="h-screen flex items-center justify-center bg-green-50">
+      <div className="bg-white p-8 rounded-md shadow-md text-center">
+        <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
+        <p className="text-lg text-gray-700">Meme Coin Balance:</p>
+        <p className="text-4xl text-blue-500">{memeBalance.toFixed(5)} MEME</p>
+      </div>
+    </div>
+  );
+}
